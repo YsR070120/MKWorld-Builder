@@ -88,7 +88,7 @@ def draw_stat_graph(char_name, custom_name, slot=1):
     ax.set_yticklabels(y_labels)
     ax.set_xlabel("Stat Value")
     #ax.set_title(f"[{slot}] {char_name} + {custom_name}")
-    ax.set_xlim(0, 4.5)
+    ax.set_xlim(0, 4.8)
     ax.grid(True, axis='x', linestyle='--', alpha=0.5)
     ax.invert_yaxis()
     ax.legend(handles=legend_patches, loc='upper right', fontsize='small', frameon=True)

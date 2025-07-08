@@ -42,8 +42,8 @@ def apply_character_specific_adjustments(char_name, custom_name, total_status):
 
 # 合計ステータスの取得
 def get_total_status(char_name, custom_name):
-    char_stats = char_df[char_df['名前'] == char_name].iloc[0]
-    custom_stats = custom_df[custom_df['名前'] == custom_name].iloc[0]
+    char_stats = char_df[char_df['Name'] == char_name].iloc[0]
+    custom_stats = custom_df[custom_df['Name'] == custom_name].iloc[0]
     total = char_stats[1:] + custom_stats[1:]
     return apply_character_specific_adjustments(char_name, custom_name, total)
 
@@ -65,8 +65,8 @@ group_colors = {
 # Streamlit UI
 st.title("マリカキャラ＋カスタム ステータス表示")
 
-char_name = st.selectbox("キャラを選んでください", char_df['名前'].dropna().unique())
-custom_name = st.selectbox("カスタムを選んでください", custom_df['名前'].dropna().unique())
+char_name = st.selectbox("キャラを選んでください", char_df['Name'].dropna().unique())
+custom_name = st.selectbox("カスタムを選んでください", custom_df['Name'].dropna().unique())
 
 # グラフの描画
 if char_name and custom_name:

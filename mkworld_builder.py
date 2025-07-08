@@ -85,6 +85,8 @@ if char_name and custom_name:
                     color=color,
                     label=key if i == 0 else ""
                 )
+
+    import matplotlib.patches as mpatches
     legend_patches = [
         mpatches.Patch(color='#96B1C8', label='Paved'),
         mpatches.Patch(color='#79CE32', label='Offroad'),

@@ -85,6 +85,12 @@ if char_name and custom_name:
                     color=color,
                     label=key if i == 0 else ""
                 )
+    legend_patches = [
+        mpatches.Patch(color='#96B1C8', label='Paved'),
+        mpatches.Patch(color='#79CE32', label='Offroad'),
+        mpatches.Patch(color='#018DFF', label='Water'),
+        mpatches.Patch(color='#FDC307', label='UI Display'),
+    ]
     ax.set_yticks(np.arange(len(group_mapping)))
     ax.set_yticklabels(y_labels)
     ax.set_xlabel("Stat Value")
@@ -92,5 +98,5 @@ if char_name and custom_name:
     ax.set_xlim(0, 4.0)
     ax.grid(True, axis='x', linestyle='--', alpha=0.5)
     ax.invert_yaxis()
-    ax.legend(loc='upper right', fontsize='small', frameon=True)
+    ax.legend(handles=legend_patches, loc='upper right', fontsize='small', frameon=True)
     st.pyplot(fig)

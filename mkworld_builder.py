@@ -11,12 +11,12 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.patches as mpatches
 
-# ファイル読み込み
+# --- ファイル読み込みと処理 ---
 char_df = pd.read_excel("char_stats.xlsx", sheet_name="シート1")[1:].copy()
 custom_df = pd.read_excel("custom_stats.xlsx", sheet_name="シート1")[1:].copy()
 
-# 列名の設定
 columns = ['Name', 'Speed_Paved', 'Speed_Offroad', 'Speed_Water', 'Speed_UI',
            'Acceleration', 'Weight', 'Handling_Paved', 'Handling_Offroad',
            'Handling_Water', 'Handling_UI']
@@ -24,12 +24,10 @@ columns = ['Name', 'Speed_Paved', 'Speed_Offroad', 'Speed_Water', 'Speed_UI',
 char_df.columns = columns
 custom_df.columns = columns
 
-# 数値に変換
 for df in [char_df, custom_df]:
     for col in columns[1:]:
         df[col] = pd.to_numeric(df[col], errors='coerce')
 
-# 補正処理
 def apply_character_specific_adjustments(char_name, custom_name, total_status):
     special_chars = ['ベビィピーチ', 'ベビィデイジー', 'バサバサ', 'パタテンテン', 'クッパ']
     special_customs = ['ファイアチャージャー', 'ロイヤルターボ', 'Bダッシュ', 'マッハクイーン',
@@ -40,14 +38,12 @@ def apply_character_specific_adjustments(char_name, custom_name, total_status):
         total_status["Handling_UI"] += 0.2
     return total_status
 
-# 合計ステータスの取得
 def get_total_status(char_name, custom_name):
     char_stats = char_df[char_df['Name'] == char_name].iloc[0]
     custom_stats = custom_df[custom_df['Name'] == custom_name].iloc[0]
     total = char_stats[1:] + custom_stats[1:]
     return apply_character_specific_adjustments(char_name, custom_name, total)
 
-# グループ表示のための設定
 group_mapping = {
     'Speed': ['Speed_Paved', 'Speed_Offroad', 'Speed_Water', 'Speed_UI'],
     'Acceleration': ['Acceleration'],
@@ -62,18 +58,13 @@ group_colors = {
     'Handling': ['#96B1C8', '#79CE32', '#018DFF', '#FDC307']
 }
 
-# Streamlit UI
-st.title("マリカキャラ＋カスタム ステータス表示")
-
-char_name = st.selectbox("キャラを選んでください", char_df['Name'].dropna().unique())
-custom_name = st.selectbox("カスタムを選んでください", custom_df['Name'].dropna().unique())
-
-# グラフの描画
-if char_name and custom_name:
+# --- 描画関数 ---
+def draw_stat_graph(char_name, custom_name, slot=1):
     total = get_total_status(char_name, custom_name)
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6, 4))
     y_labels = list(group_mapping.keys())
     bar_height = 0.15
+
     for i, (group, keys) in enumerate(group_mapping.items()):
         for j, key in enumerate(keys):
             if key in total:
@@ -86,19 +77,30 @@ if char_name and custom_name:
                     label=key if i == 0 else ""
                 )
 
-    import matplotlib.patches as mpatches
     legend_patches = [
         mpatches.Patch(color='#96B1C8', label='Paved'),
         mpatches.Patch(color='#79CE32', label='Offroad'),
         mpatches.Patch(color='#018DFF', label='Water'),
         mpatches.Patch(color='#FDC307', label='UI Display'),
     ]
+
     ax.set_yticks(np.arange(len(group_mapping)))
     ax.set_yticklabels(y_labels)
     ax.set_xlabel("Stat Value")
-    ax.set_title(f"{char_name} + {custom_name} - Category Stats")
+    ax.set_title(f"[{slot}] {char_name} + {custom_name}")
     ax.set_xlim(0, 4.0)
     ax.grid(True, axis='x', linestyle='--', alpha=0.5)
     ax.invert_yaxis()
     ax.legend(handles=legend_patches, loc='upper right', fontsize='small', frameon=True)
     st.pyplot(fig)
+
+# --- UI & 表示 ---
+st.title("マリカキャラ＋カスタム ステータス比較")
+
+cols = st.columns(3)
+for i in range(3):
+    with cols[i]:
+        st.subheader(f"組み合わせ {i+1}")
+        char_name = st.selectbox(f"キャラ {i+1}", char_df['Name'].dropna().unique(), key=f"char_{i}")
+        custom_name = st.selectbox(f"カスタム {i+1}", custom_df['Name'].dropna().unique(), key=f"custom_{i}")
+        draw_stat_graph(char_name, custom_name, slot=i+1)

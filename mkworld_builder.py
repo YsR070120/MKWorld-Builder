@@ -17,9 +17,10 @@ char_df = pd.read_excel("char_stats.xlsx", sheet_name="シート1")[1:].copy()
 custom_df = pd.read_excel("custom_stats.xlsx", sheet_name="シート1")[1:].copy()
 
 # 列名の設定
-columns = ['名前', 'スピード_舗装路', 'スピード_悪路', 'スピード_水上', 'スピード_ゲーム内表記',
-           '加速', '重さ', '曲がりやすさ_舗装路', '曲がりやすさ_悪路',
-           '曲がりやすさ_水上', '曲がりやすさ_ゲーム内表記']
+columns = ['Name', 'Speed_Paved', 'Speed_Offroad', 'Speed_Water', 'Speed_UI',
+           'Acceleration', 'Weight', 'Handling_Paved', 'Handling_Offroad',
+           'Handling_Water', 'Handling_UI']
+
 char_df.columns = columns
 custom_df.columns = columns
 
@@ -35,8 +36,8 @@ def apply_character_specific_adjustments(char_name, custom_name, total_status):
                        'ラリーカート', 'タートルバギー', 'ケロケロード', 'スーパーカーペット',
                        'H₂O', 'ドッシーウェーブ', 'スターモービル']
     if char_name in special_chars and custom_name in special_customs:
-        total_status["スピード_ゲーム内表記"] -= 0.2
-        total_status["曲がりやすさ_ゲーム内表記"] += 0.2
+        total_status["Speed_UI"] -= 0.2
+        total_status["Handling_UI"] += 0.2
     return total_status
 
 # 合計ステータスの取得
@@ -48,10 +49,10 @@ def get_total_status(char_name, custom_name):
 
 # グループ表示のための設定
 group_mapping = {
-    'Speed': ['スピード_舗装路', 'スピード_悪路', 'スピード_水上', 'スピード_ゲーム内表記'],
-    'Acceleration': ['加速'],
-    'Weight': ['重さ'],
-    'Handling': ['曲がりやすさ_舗装路', '曲がりやすさ_悪路', '曲がりやすさ_水上', '曲がりやすさ_ゲーム内表記']
+    'Speed': ['Speed_Paved', 'Speed_Offroad', 'Speed_Water', 'Speed_UI'],
+    'Acceleration': ['Acceleration'],
+    'Weight': ['Weight'],
+    'Handling': ['Handling_Paved', 'Handling_Offroad', 'Handling_Water', 'Handling_UI']
 }
 
 group_colors = {

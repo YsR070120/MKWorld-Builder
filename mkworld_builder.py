@@ -56,8 +56,8 @@ group_mapping = {
 
 group_colors = {
     'Speed': ['#96B1C8', '#79CE32', '#018DFF', '#FDC307'],
-    'Acceleration': ['#999999'],
-    'Weight': ['#999999'],
+    'Acceleration': ['#FDC307'],
+    'Weight': ['#FDC307'],
     'Handling': ['#96B1C8', '#79CE32', '#018DFF', '#FDC307']
 }
 

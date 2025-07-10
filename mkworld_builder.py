@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as mpatches
 
-# --- ファイル読み込みと処理 ---
 char_df = pd.read_excel("char_stats.xlsx", sheet_name="シート1")[1:].copy()
 custom_df = pd.read_excel("custom_stats.xlsx", sheet_name="シート1")[1:].copy()
 
@@ -58,7 +57,6 @@ group_colors = {
     'Handling': ['#96B1C8', '#79CE32', '#018DFF', '#FDC307']
 }
 
-# --- 描画関数 ---
 def draw_stat_graph(char_name, custom_name, slot=1):
     total = get_total_status(char_name, custom_name)
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -94,8 +92,7 @@ def draw_stat_graph(char_name, custom_name, slot=1):
     ax.legend(handles=legend_patches, loc='upper right', fontsize='small', frameon=True)
     st.pyplot(fig)
 
-# --- UI & 表示 ---
-st.title("マリカキャラ＋カスタム ステータス比較")
+st.title("Mario Kart World Builder 1.0")
 
 cols = st.columns(3)
 for i in range(3):
